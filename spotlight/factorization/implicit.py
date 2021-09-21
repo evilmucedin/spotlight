@@ -8,6 +8,8 @@ import torch
 
 import torch.optim as optim
 
+import tqdm
+
 from spotlight.helpers import _repr_model
 from spotlight.factorization._components import _predict_process_ids
 from spotlight.losses import (adaptive_hinge_loss,
@@ -222,9 +224,9 @@ class ImplicitFactorizationModel(object):
 
             for (minibatch_num,
                  (batch_user,
-                  batch_item)) in enumerate(minibatch(user_ids_tensor,
+                  batch_item)) in tqdm.tqdm(enumerate(minibatch(user_ids_tensor,
                                                       item_ids_tensor,
-                                                      batch_size=self._batch_size)):
+                                                      batch_size=self._batch_size))):
 
                 positive_prediction = self._net(batch_user, batch_item)
 
