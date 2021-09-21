@@ -276,6 +276,29 @@ class ImplicitFactorizationModel(object):
 
         return negative_prediction.view(n, len(user_ids))
 
+    def predictTop(self, user_id, n, item_ids=None):
+        self._check_input(user_id, item_ids, allow_items_none=True)
+        self._net.train(False)
+
+        user_id, item_ids = _predict_process_ids(user_id, item_ids,
+                                                  self._num_items,
+                                                  self._use_cuda)
+
+        out = self._net(user_id, item_ids)
+
+        scores = cpu(out).detach().numpy().flatten()
+
+        pairs = []
+        for i in range(len(scores)):
+            pairs.append((scores[i], item_ids[i].item()))
+        pairs.sort()
+    
+        result = []
+        for i in range(n):
+            result.append(pairs[-1 - i][1])
+
+        return result
+
     def predict(self, user_ids, item_ids=None):
         """
         Make predictions: given a user id, compute the recommendation
