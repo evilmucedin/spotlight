@@ -276,7 +276,7 @@ class ImplicitFactorizationModel(object):
 
         return negative_prediction.view(n, len(user_ids))
 
-    def predictTop(self, user_id, n, item_ids=None):
+    def predictTop(self, user_id, n, item_ids=None, withScores=False):
         self._check_input(user_id, item_ids, allow_items_none=True)
         self._net.train(False)
 
@@ -295,7 +295,10 @@ class ImplicitFactorizationModel(object):
     
         result = []
         for i in range(n):
-            result.append(pairs[-1 - i][1])
+            if withScores:
+                result.append(pairs[-1 - i])
+            else:
+                result.append(pairs[-1 - i][1])
 
         return result
 
