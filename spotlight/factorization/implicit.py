@@ -183,6 +183,12 @@ class ImplicitFactorizationModel(object):
             raise ValueError('Maximum item id greater '
                              'than number of items in model.')
 
+    def userEmbeddings(self):
+        return self._net.user_embeddings(torch.LongTensor([list(range(self._num_users))]))[0, :, :].detach().numpy()
+
+    def itemEmbeddings(self):
+        return self._net.item_embeddings(torch.LongTensor([list(range(self._num_items))]))[0, :, :].detach().numpy()
+
     def fit(self, interactions, verbose=False):
         """
         Fit the model.
