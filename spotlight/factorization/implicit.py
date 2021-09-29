@@ -186,8 +186,14 @@ class ImplicitFactorizationModel(object):
     def userEmbeddings(self):
         return self._net.user_embeddings.cpu()(torch.LongTensor([list(range(self._num_users))]))[0, :, :].cpu().detach().numpy()
 
+    def userBiases(self):
+        return self._net.user_biases.cpu()(torch.LongTensor([list(range(self._num_users))]))[0, :, 0].cpu().detach().numpy()
+
     def itemEmbeddings(self):
         return self._net.item_embeddings.cpu()(torch.LongTensor([list(range(self._num_items))]))[0, :, :].cpu().detach().numpy()
+
+    def itemBiases(self):
+        return self._net.item_biases.cpu()(torch.LongTensor([list(range(self._num_items))]))[0, :, 0].cpu().detach().numpy()
 
     def fit(self, interactions, verbose=False):
         """
